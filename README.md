@@ -1,2 +1,2 @@
 # AIC2150
-Codes for AI tools and techniques
+Code for AI tools and techniques
