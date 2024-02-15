@@ -1,0 +1,47 @@
+% Load the dataset from the CSV file
+filename = 'your_dataset.csv';  % Replace with your actual file path
+dataTable = readtable(filename);
+
+% Display the first few rows of the dataset
+disp('First few rows of the dataset:');
+disp(head(dataTable));
+
+% Extracting features and target variable
+features = dataTable(:, 2:end);  % Assuming the target variable is in the second column
+targetVariable = dataTable(:, 1);  % Assuming the target variable is in the first column
+
+% Preprocessing (if needed)
+% You might want to scale/normalize features, handle missing data, or perform other preprocessing steps.
+
+% Split the dataset into training and testing sets
+rng(42);  % For reproducibility
+splitRatio = 0.8;  % Adjust as needed
+idx = randperm(size(dataTable, 1));
+trainingIdx = idx(1:round(splitRatio * length(idx)));
+testingIdx = idx(round(splitRatio * length(idx)) + 1:end);
+
+trainingData = dataTable(trainingIdx, :);
+testingData = dataTable(testingIdx, :);
+
+% Separate features and target variable for training and testing
+X_train = table2array(trainingData(:, 2:end));
+y_train = table2array(trainingData(:, 1));
+
+X_test = table2array(testingData(:, 2:end));
+y_test = table2array(testingData(:, 1));
+
+% Perform k-Nearest Neighbors (KNN)
+k = 3;  % Set the number of neighbors (adjust as needed)
+mdl = fitcknn(X_train, y_train, 'NumNeighbors', k);
+
+% Make predictions on the test set
+predictions = predict(mdl, X_test);
+
+% Evaluate the model (example: Classification Accuracy for classification problems)
+accuracy = sum(predictions == y_test) / length(y_test);
+disp(['Classification Accuracy: ', num2str(accuracy)]);
+
+% Additional analysis or visualizations can be added based on your goals
+
+% Display a message indicating successful completion
+disp('Analysis completed successfully.');
